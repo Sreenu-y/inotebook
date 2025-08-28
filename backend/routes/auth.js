@@ -4,10 +4,10 @@ const User = require("../models/User");
 const { body, validationResult } = require("express-validator");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_SECRET = "hihello";
 const fetchuser = require("../middleware/fetchuser");
 
-//Create User Route: api/auth/createuser
+//ROUTE 1: Create User Route: api/auth/createuser
 router.post(
   "/createuser",
   [
@@ -51,7 +51,7 @@ router.post(
   }
 );
 
-//Authenticate user using Post: "api/auth/login"
+//ROUTE 2: Authenticate user using Post: "api/auth/login"
 router.post(
   "/login",
   [
@@ -95,7 +95,7 @@ router.post(
   }
 );
 
-//Authenticate user using Post: "api/auth/getuser"
+//ROUTE 3: Authenticate user using Post: "api/auth/getuser"
 router.post("/getuser", fetchuser, async (req, res) => {
   try {
     const userId = req.user.id;
