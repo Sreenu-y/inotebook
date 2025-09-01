@@ -5,18 +5,31 @@ import AddNote from "./AddNote";
 
 const Notes = () => {
   const context = useContext(noteContext);
-  const { notes, getNotes } = context;
+  const { notes, getNotes, editNote } = context;
   useEffect(() => {
     getNotes();
   }, []);
   const ref = useRef(null);
-  const [note, setNote] = useState({ title: "", description: "", tag: "" });
+  const refClose = useRef(null);
+  const [note, setNote] = useState({
+    id: "",
+    etitle: "",
+    edescription: "",
+    etag: "",
+  });
 
-  const updateNote = (note) => {
+  const updateNote = (currNote) => {
     ref.current.click();
+    setNote({
+      id: currNote._id,
+      etitle: currNote.title,
+      edescription: currNote.description,
+      etag: currNote.tag,
+    });
   };
   const handleClick = (e) => {
-    e.preventDefault();
+    editNote(note.id, note.etitle, note.edescription, note.etag);
+    refClose.current.click();
   };
   const onChange = (e) => {
     setNote({ ...note, [e.target.name]: e.target.value });
@@ -38,7 +51,7 @@ const Notes = () => {
       <div
         className="modal fade"
         id="exampleModal"
-        tabindex="-1"
+        tabIndex={-1}
         role="dialog"
         aria-labelledby="exampleModalLabel"
         aria-hidden="true"
@@ -59,39 +72,42 @@ const Notes = () => {
             <div className="modal-body">
               <form className="my-3">
                 <div className="mb-3">
-                  <label htmlFor="title" className="form-label">
+                  <label htmlFor="etitle" className="form-label">
                     Title
                   </label>
                   <input
                     type="text"
                     className="form-control"
-                    id="title"
-                    name="title"
+                    id="etitle"
+                    name="etitle"
+                    value={note.etitle}
                     aria-describedby="emailHelp"
                     onChange={onChange}
                   />
                 </div>
                 <div className="mb-3">
-                  <label htmlFor="description" className="form-label">
+                  <label htmlFor="edescription" className="form-label">
                     Description
                   </label>
                   <input
                     type="text"
                     className="form-control"
-                    id="description"
-                    name="description"
+                    id="edescription"
+                    name="edescription"
+                    value={note.edescription}
                     onChange={onChange}
                   />
                 </div>
                 <div className="mb-3">
-                  <label htmlFor="tag" className="form-label">
+                  <label htmlFor="etag" className="form-label">
                     Tag
                   </label>
                   <input
                     type="text"
                     className="form-control"
-                    id="tag"
-                    name="tag"
+                    value={note.etag}
+                    id="etag"
+                    name="etag"
                     onChange={onChange}
                   />
                 </div>
@@ -100,12 +116,17 @@ const Notes = () => {
             <div className="modal-footer">
               <button
                 type="button"
+                ref={refClose}
                 className="btn btn-secondary"
-                data-dismiss="modal"
+                data-bs-dismiss="modal"
               >
                 Close
               </button>
-              <button type="button" className="btn btn-primary">
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={handleClick}
+              >
                 Update Note
               </button>
             </div>
