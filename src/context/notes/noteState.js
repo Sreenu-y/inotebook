@@ -12,11 +12,11 @@ const NoteState = (props) => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        "auth-token":
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjhhOTgwNmMxMDliMDk0NmNlMDhmN2ZhIn0sImlhdCI6MTc1NTk4MTMwOH0.nF06cYt_WdZuwo5gpW0B2hVedaQZZQY83RpDhNW535M",
+        "auth-token": localStorage.getItem("token"),
       },
     });
     const json = await response.json();
+
     setNotes(json);
   };
 
@@ -26,8 +26,7 @@ const NoteState = (props) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "auth-token":
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjhhOTgwNmMxMDliMDk0NmNlMDhmN2ZhIn0sImlhdCI6MTc1NTk4MTMwOH0.nF06cYt_WdZuwo5gpW0B2hVedaQZZQY83RpDhNW535M",
+        "auth-token": localStorage.getItem("token"),
       },
       body: JSON.stringify({ title, description, tag }),
     });
@@ -37,30 +36,26 @@ const NoteState = (props) => {
 
   //Delete Note
   const deleteNote = async (id) => {
-    let response = await fetch(`${path}/api/notes/deletenote/${id}`, {
+    await fetch(`${path}/api/notes/deletenote/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
-        "auth-token":
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjhhOTgwNmMxMDliMDk0NmNlMDhmN2ZhIn0sImlhdCI6MTc1NTk4MTMwOH0.nF06cYt_WdZuwo5gpW0B2hVedaQZZQY83RpDhNW535M",
+        "auth-token": localStorage.getItem("token"),
       },
     });
-    const json = await response.json();
     setNotes(notes.filter((note) => note._id !== id));
   };
 
   //Edit Note
   const editNote = async (id, title, description, tag) => {
-    let response = await fetch(`${path}/api/notes/updatenote/${id}`, {
+    await fetch(`${path}/api/notes/updatenote/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        "auth-token":
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjhhOTgwNmMxMDliMDk0NmNlMDhmN2ZhIn0sImlhdCI6MTc1NTk4MTMwOH0.nF06cYt_WdZuwo5gpW0B2hVedaQZZQY83RpDhNW535M",
+        "auth-token": localStorage.getItem("token"),
       },
       body: JSON.stringify({ title, description, tag }),
     });
-    const json = await response.json();
     let newNote = JSON.parse(JSON.stringify(notes));
     for (let index = 0; index < newNote.length; index++) {
       if (newNote[index]._id === id) {

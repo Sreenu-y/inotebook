@@ -1,9 +1,28 @@
 import React, { useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const location = useLocation();
-  useEffect(() => {}, [location]);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
+
+  useEffect(() => {
+    if (location.pathname === "/") {
+      document.title = "iNoteBook - Home";
+    } else if (location.pathname === "/about") {
+      document.title = "iNoteBook - About";
+    } else if (location.pathname === "/login") {
+      document.title = "iNoteBook - Login";
+    } else if (location.pathname === "/signup") {
+      document.title = "iNoteBook - Signup";
+    } else {
+      document.title = "iNoteBook";
+    }
+  }, [location]);
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       <div className="container-fluid">
@@ -45,14 +64,20 @@ const Navbar = () => {
               </Link>
             </li>
           </ul>
-          <form className="d-flex" role="search">
-            <Link className="btn btn-primary mx-1" to="/login" role="button">
-              Login
-            </Link>
-            <Link className="btn btn-primary mx-1" to="/signup" role="button">
-              Signup
-            </Link>
-          </form>
+          {!localStorage.getItem("token") ? (
+            <form className="d-flex" role="search">
+              <Link className="btn btn-primary mx-1" to="/login" role="button">
+                Login
+              </Link>
+              <Link className="btn btn-primary mx-1" to="/signup" role="button">
+                Signup
+              </Link>
+            </form>
+          ) : (
+            <button className="btn btn-primary" onClick={handleLogout}>
+              Logout
+            </button>
+          )}
         </div>
       </div>
     </nav>
